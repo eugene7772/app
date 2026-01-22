@@ -11,7 +11,6 @@ import java.time.LocalDate;
 
 @Data
 @ToString
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRegisterRequest {
@@ -24,13 +23,13 @@ public class UserRegisterRequest {
     private String secondName;
 
     @NotNull
+    private String login;
+
     @Past
     private LocalDate birthdate;
 
-    @Size(max = 500)
     private String biography;
 
-    @NotBlank
     private String city;
 
     @NotBlank
