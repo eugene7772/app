@@ -12,14 +12,13 @@ import social.network.app.dto.UserRegisterResponse;
 import social.network.app.entity.User;
 import social.network.app.entity.UserEntity;
 import social.network.app.entity.UserInfo;
+import social.network.app.exception.PasswordIncorrectException;
+import social.network.app.exception.UserNotFoundException;
+import social.network.app.exception.UserRegisterException;
 import social.network.app.mapper.UserMapper;
 import social.network.app.repository.UserRepository;
 
-import java.util.Optional;
 import java.util.UUID;
-
-import static social.network.app.constants.ErrorConstants.PASSWORD_INCORRECT;
-import static social.network.app.constants.ErrorConstants.USER_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -41,41 +40,22 @@ public class UserService {
             UUID id = userRepository.save(userEntity);
             return new UserRegisterResponse(id);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            throw new UserRegisterException(e.getMessage());
         }
-        return null;
     }
 
     @Transactional
     public UserLoginResponse login(UserLoginRequest userLoginRequest) {
-        try {
-            Optional<User> userOptional = userRepository.getBaseById(userLoginRequest.getId());
-            if (userOptional.isEmpty()) {
-                throw new Exception(USER_NOT_FOUND);
-            }
-            User user = userOptional.get();
-            if (!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPasswordHash())) {
-                throw new Exception(PASSWORD_INCORRECT);
-            }
-            return new UserLoginResponse(UUID.randomUUID().toString());
-        } catch (Exception e) {
-            log.error(e.getMessage());
+        User user = userRepository.getBaseById(userLoginRequest.getId()).orElseThrow(UserNotFoundException::new);
+        if (!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPasswordHash())) {
+            throw new PasswordIncorrectException();
         }
-        return null;
+        return new UserLoginResponse(UUID.randomUUID());
     }
 
     @Transactional
     public UserInfo getById(UUID user_id) {
-        try {
-            Optional<UserInfo> userInfoOptional = userRepository.getFullById(user_id);
-            if (userInfoOptional.isEmpty()) {
-                throw new Exception(USER_NOT_FOUND);
-            }
-            return userInfoOptional.get();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-        return null;
+        return userRepository.getFullById(user_id).orElseThrow(UserNotFoundException::new);
     }
 
 }
