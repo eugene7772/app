@@ -32,6 +32,9 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtService jwtService;
+
     @Transactional
     public UserRegisterResponse register(UserRegisterRequest userRegisterRequest) {
         try {
@@ -50,7 +53,7 @@ public class UserService {
         if (!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPasswordHash())) {
             throw new PasswordIncorrectException();
         }
-        return new UserLoginResponse(UUID.randomUUID());
+        return new UserLoginResponse(jwtService.generateToken(user.getLogin()));
     }
 
     @Transactional

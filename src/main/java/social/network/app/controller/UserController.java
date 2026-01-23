@@ -21,7 +21,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<UserLoginResponse> login(@Valid @RequestBody UserLoginRequest userLoginRequest) {
         UserLoginResponse loginResponse = userService.login(userLoginRequest);
         return ResponseEntity.ok(loginResponse);
@@ -33,7 +33,7 @@ public class UserController {
         return ResponseEntity.ok(registerResponse);
     }
 
-    @RequestMapping(value = "/user/get/{id}")
+    @GetMapping(value = "/user/get/{id}")
     public ResponseEntity<UserInfo> getById(@PathVariable UUID id) {
         UserInfo userInfo = userService.getById(id);
         return ResponseEntity.ok(userInfo);

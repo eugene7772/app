@@ -6,3 +6,7 @@ spring:
     username: postgres
     password: ghwnj4l5kjtbnw
     driver-class-name: org.postgresql.Driver
+app:
+  jwt:
+    secret: "fgaqw342rvq3453dfgawer2342ef23f23f"
+    ttl-minutes: 5
