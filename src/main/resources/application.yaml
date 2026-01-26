@@ -2,11 +2,12 @@ spring:
   application:
     name: app
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: ghwnj4l5kjtbnw
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
+
 app:
   jwt:
-    secret: "fgaqw342rvq3453dfgawer2342ef23f23f"
-    ttl-minutes: 5
+    secret: ${APP_JWT_SECRET:fgaqw342rvq3453dfgawer2342ef23f23f}
+    ttl-minutes: ${APP_JWT_TTL_MINUTES:5}

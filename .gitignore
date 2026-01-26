@@ -1,4 +1,4 @@
-HELP.md
+README.md
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -35,3 +35,5 @@ build/
 postman/.postman/
 postman/postman/environments/
 postman/postman/globals/
+
+.env
