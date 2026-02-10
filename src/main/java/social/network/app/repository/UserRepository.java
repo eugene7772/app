@@ -10,6 +10,7 @@ import social.network.app.entity.UserEntity;
 import social.network.app.entity.UserInfo;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -86,4 +87,16 @@ public class UserRepository {
         }
     }
 
+    public Optional<List<UserInfo>> findByFirstNameAndLastName(String firstName, String lastName) {
+        String sql = """
+                    SELECT user_id, first_name, second_name, birthdate, biography, city
+                    FROM user_info
+                    WHERE first_name LIKE ? AND second_name LIKE ?
+                """;
+        try {
+            return Optional.of(jdbcTemplate.query(sql, USER_INFO_BASE_MAPPER, firstName, lastName));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
 }

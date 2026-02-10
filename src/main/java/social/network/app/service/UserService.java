@@ -18,6 +18,7 @@ import social.network.app.exception.UserRegisterException;
 import social.network.app.mapper.UserMapper;
 import social.network.app.repository.UserRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -43,6 +44,7 @@ public class UserService {
             UUID id = userRepository.save(userEntity);
             return new UserRegisterResponse(id);
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new UserRegisterException(e.getMessage());
         }
     }
@@ -61,4 +63,8 @@ public class UserService {
         return userRepository.getFullById(user_id).orElseThrow(UserNotFoundException::new);
     }
 
+    @Transactional
+    public List<UserInfo> search(String firstName, String lastName) {
+        return userRepository.findByFirstNameAndLastName(firstName, lastName).get();
+    }
 }

@@ -12,6 +12,7 @@ import social.network.app.dto.UserRegisterResponse;
 import social.network.app.entity.UserInfo;
 import social.network.app.service.UserService;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -37,6 +38,12 @@ public class UserController {
     public ResponseEntity<UserInfo> getById(@PathVariable UUID id) {
         UserInfo userInfo = userService.getById(id);
         return ResponseEntity.ok(userInfo);
+    }
+
+    @GetMapping(value = "/user/search")
+    public ResponseEntity<List<UserInfo>> search(@RequestParam("first_name") String firstName, @RequestParam("last_name") String lastName) {
+        List<UserInfo> userInfoList = userService.search(firstName, lastName);
+        return ResponseEntity.ok(userInfoList);
     }
 
 }
