@@ -37,3 +37,4 @@ postman/postman/environments/
 postman/postman/globals/
 
 .env
+/volumes/
