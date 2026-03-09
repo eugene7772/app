@@ -58,12 +58,12 @@ public class UserService {
         return new UserLoginResponse(jwtService.generateToken(user.getLogin()));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public UserInfo getById(UUID user_id) {
         return userRepository.getFullById(user_id).orElseThrow(UserNotFoundException::new);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<UserInfo> search(String firstName, String lastName) {
         return userRepository.findByFirstNameAndLastName(firstName, lastName).get();
     }
