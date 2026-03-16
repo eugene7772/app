@@ -1,5 +1,8 @@
 package social.network.app.service;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,12 +39,21 @@ public class UserService {
     @Autowired
     private JwtService jwtService;
 
+    private final Counter dbRowsInsertedCounter;
+
+    public UserService(MeterRegistry meterRegistry) {
+        dbRowsInsertedCounter = Counter.builder("app_db_rows_inserted_total")
+                .description("Total successfully inserted rows into DB")
+                .register(meterRegistry);
+    }
+
     @Transactional
     public UserRegisterResponse register(UserRegisterRequest userRegisterRequest) {
         try {
             String passwordHash = passwordEncoder.encode(userRegisterRequest.getPassword());
             UserEntity userEntity = userMapper.toEntity(userRegisterRequest, passwordHash);
             UUID id = userRepository.save(userEntity);
+            dbRowsInsertedCounter.increment();
             return new UserRegisterResponse(id);
         } catch (Exception e) {
             log.error(e.getMessage());

@@ -7,12 +7,36 @@ app:
     ttl-minutes: ${APP_JWT_TTL_MINUTES:5}
   datasource:
     write:
-      jdbc-url: jdbc:postgresql://localhost:15432/postgres
-      username: postgres
-      password: postgres
-      driver-class-name: org.postgresql.Driver
-    read:
       jdbc-url: jdbc:postgresql://localhost:25432/postgres
       username: postgres
-      password: postgres
+      password: pass
       driver-class-name: org.postgresql.Driver
+      hikari:
+        connection-timeout: 3000
+        validation-timeout: 2000
+        maximum-pool-size: 10
+        minimum-idle: 2
+        max-lifetime: 30000
+    read:
+      jdbc-url: jdbc:postgresql://localhost:35432/postgres
+      username: postgres
+      password: pass
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        connection-timeout: 3000
+        validation-timeout: 2000
+        maximum-pool-size: 10
+        minimum-idle: 2
+        max-lifetime: 30000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true

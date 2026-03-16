@@ -38,14 +38,7 @@ public class GlobalExceptionHandler {
         var fields = e.getBindingResult().getFieldErrors().stream()
                 .map(fe -> new ErrorResponse.FieldViolation(fe.getField(), fe.getDefaultMessage()))
                 .toList();
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(VALIDATION_ERROR, fields));
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleAny(Exception e) {
-        ErrorResponse body = new ErrorResponse(SERVER_ERROR, List.of());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 
 }
