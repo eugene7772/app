@@ -6,10 +6,15 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:ghwnj4l5kjtbnw}
     driver-class-name: org.postgresql.Driver
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
 app:
   jwt:
     secret: ${APP_JWT_SECRET:fgaqw342rvq3453dfgawer2342ef23f23f}
     ttl-minutes: ${APP_JWT_TTL_MINUTES:5}
+
   datasource:
     write:
       jdbc-url: jdbc:postgresql://localhost:25432/postgres

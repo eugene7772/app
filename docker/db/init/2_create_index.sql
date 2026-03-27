@@ -1,1 +1,0 @@
-CREATE INDEX idx_user_info_first_name_second_name ON user_info (first_name, second_name);

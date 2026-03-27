@@ -21,10 +21,10 @@ public class JwtService {
     @Value("${app.jwt.ttl-minutes}")
     private long ttlMinutes;
 
-    public String generateToken(String login) {
+    public String generateToken(String userId) {
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .subject(login)
+                .subject(userId)
                 .issuedAt(now)
                 .expiresAt(now.plus(ttlMinutes, ChronoUnit.MINUTES))
                 .build();

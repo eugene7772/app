@@ -67,7 +67,7 @@ public class UserService {
         if (!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPasswordHash())) {
             throw new PasswordIncorrectException();
         }
-        return new UserLoginResponse(jwtService.generateToken(user.getLogin()));
+        return new UserLoginResponse(jwtService.generateToken(String.valueOf(userLoginRequest.getId())));
     }
 
     @Transactional(readOnly = true)

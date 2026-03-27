@@ -17,19 +17,13 @@ import java.util.UUID;
 
 
 @RestController
+@RequestMapping("/user")
 @Slf4j
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(value = "/login")
-    public ResponseEntity<UserLoginResponse> login(@Valid @RequestBody UserLoginRequest userLoginRequest) {
-        UserLoginResponse loginResponse = userService.login(userLoginRequest);
-        log.info("login successful: {}", loginResponse);
-        return ResponseEntity.ok(loginResponse);
-    }
-
-    @PostMapping(value = "/user/register")
+    @PostMapping(value = "/register")
     public ResponseEntity<UserRegisterResponse> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
         log.info("registering userRegisterRequest: {}", userRegisterRequest);
         UserRegisterResponse registerResponse = userService.register(userRegisterRequest);
@@ -37,14 +31,14 @@ public class UserController {
         return ResponseEntity.ok(registerResponse);
     }
 
-    @GetMapping(value = "/user/get/{id}")
+    @GetMapping(value = "/get/{id}")
     public ResponseEntity<UserInfo> getById(@PathVariable UUID id) {
         UserInfo userInfo = userService.getById(id);
         log.info("getById successful: {}", userInfo);
         return ResponseEntity.ok(userInfo);
     }
 
-    @GetMapping(value = "/user/search")
+    @GetMapping(value = "/search")
     public ResponseEntity<List<UserInfo>> search(@RequestParam("first_name") String firstName, @RequestParam("last_name") String lastName) {
         List<UserInfo> userInfoList = userService.search(firstName, lastName);
         log.info("search successful: {}", userInfoList);
