@@ -2,7 +2,8 @@
   "info": {
     "_postman_id": "c526de46-fa43-410a-b0b2-d95964e3a1d1",
     "name": "OTUS Highload Architect",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "21832739"
   },
   "item": [
     {
@@ -14,7 +15,6 @@
             {
               "listen": "test",
               "script": {
-                "id": "d64d90fd-19f3-48d6-8547-4164399a5561",
                 "exec": [
                   "const json = pm.response.json();\r",
                   "pm.test(\"Token exists\", function () {\r",
@@ -29,7 +29,6 @@
               }
             }
           ],
-          "id": "0a8263c9-dd11-49ed-9f07-9423243d1386",
           "request": {
             "method": "POST",
             "header": [
@@ -44,7 +43,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"id\": \"225c914e-0ff6-464a-8fb4-71bedc1eb039\",\n  \"login\": \"login\",\n  \"password\": \"12345678\"\n}",
+              "raw": "{\n  \"id\": \"aeacec35-0ad9-4a15-b3e9-5758409fbfe3\",\n  \"login\": \"u19079660\",\n  \"password\": \"12345678\"\n}",
               "options": {
                 "raw": {
                   "headerFamily": "json",
@@ -65,7 +64,6 @@
           },
           "response": [
             {
-              "id": "ee059ee0-962f-4ca5-a1b6-bf9b5d2454df",
               "name": "Успешная аутентификация",
               "originalRequest": {
                 "method": "POST",
@@ -112,7 +110,6 @@
               "body": "{\n  \"token\": \"e4d2e6b0-cde2-42c5-aac3-0b8316f21e58\"\n}"
             },
             {
-              "id": "27615d21-86f2-490a-9a93-1a8661fcf9bf",
               "name": "Невалидные данные",
               "originalRequest": {
                 "method": "POST",
@@ -150,7 +147,6 @@
               "body": ""
             },
             {
-              "id": "d5811915-3ea6-46db-8320-65ba4123443e",
               "name": "Пользователь не найден",
               "originalRequest": {
                 "method": "POST",
@@ -188,7 +184,6 @@
               "body": ""
             },
             {
-              "id": "acd05816-aba0-4bcd-bd99-f4f7e1c01903",
               "name": "Ошибка сервера",
               "originalRequest": {
                 "method": "POST",
@@ -231,19 +226,19 @@
                   "value": "application/json"
                 },
                 {
-                  "key": "Retry-After",
-                  "value": "6322",
+                  "disabled": false,
                   "description": {
                     "content": "Время, через которое еще раз нужно сделать запрос",
                     "type": "text/plain"
-                  }
+                  },
+                  "key": "Retry-After",
+                  "value": "6322"
                 }
               ],
               "cookie": [],
               "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
             },
             {
-              "id": "b173a501-cc34-4082-80c5-88efcf4719db",
               "name": "Ошибка сервера",
               "originalRequest": {
                 "method": "POST",
@@ -286,12 +281,13 @@
                   "value": "application/json"
                 },
                 {
-                  "key": "Retry-After",
-                  "value": "6322",
+                  "disabled": false,
                   "description": {
                     "content": "Время, через которое еще раз нужно сделать запрос",
                     "type": "text/plain"
-                  }
+                  },
+                  "key": "Retry-After",
+                  "value": "6322"
                 }
               ],
               "cookie": [],
@@ -299,8 +295,7 @@
             }
           ]
         }
-      ],
-      "id": "4ce8c65c-0e48-43d2-9cc4-46892931d93d"
+      ]
     },
     {
       "name": "user",
@@ -310,7 +305,20 @@
           "item": [
             {
               "name": "Регистрация нового пользователя",
-              "id": "19a5bba6-34c2-4259-8ce6-95b786bc0424",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const json = pm.response.json();\r",
+                      "pm.environment.set(\"user_id\", json.user_id);"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "noauth"
@@ -328,7 +336,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"first_name\": \"Имя\",\n  \"second_name\": \"Фамилия\",\n  \"birthdate\": \"2017-02-01\",\n  \"biography\": \"Хобби, интересы и т.п.\",\n  \"city\": \"Москва\",\n  \"password\": \"12345678\",\n  \"login\": \"login3\"\n}",
+                  "raw": "{\n  \"first_name\": \"Имя\",\n  \"second_name\": \"Фамилия\",\n  \"birthdate\": \"2017-02-01\",\n  \"biography\": \"Хобби, интересы и т.п.\",\n  \"city\": \"Москва\",\n  \"password\": \"12345678\",\n  \"login\": \"login1\"\n}",
                   "options": {
                     "raw": {
                       "headerFamily": "json",
@@ -350,7 +358,6 @@
               },
               "response": [
                 {
-                  "id": "2fd8e19a-f14d-49e3-a670-b598ec74d7c9",
                   "name": "Успешная регистрация",
                   "originalRequest": {
                     "method": "POST",
@@ -398,7 +405,6 @@
                   "body": "{\n  \"user_id\": \"e4d2e6b0-cde2-42c5-aac3-0b8316f21e58\"\n}"
                 },
                 {
-                  "id": "4ba268c4-e3d7-4bc2-ae15-6624875f4498",
                   "name": "Невалидные данные",
                   "originalRequest": {
                     "method": "POST",
@@ -437,7 +443,6 @@
                   "body": ""
                 },
                 {
-                  "id": "e6a5a2fd-678b-479d-aeb1-3bd170a43682",
                   "name": "Ошибка сервера",
                   "originalRequest": {
                     "method": "POST",
@@ -481,19 +486,19 @@
                       "value": "application/json"
                     },
                     {
-                      "key": "Retry-After",
-                      "value": "6322",
+                      "disabled": false,
                       "description": {
                         "content": "Время, через которое еще раз нужно сделать запрос",
                         "type": "text/plain"
-                      }
+                      },
+                      "key": "Retry-After",
+                      "value": "6322"
                     }
                   ],
                   "cookie": [],
                   "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
                 },
                 {
-                  "id": "d044ff1b-9513-4144-adde-5d15879df213",
                   "name": "Ошибка сервера",
                   "originalRequest": {
                     "method": "POST",
@@ -537,12 +542,13 @@
                       "value": "application/json"
                     },
                     {
-                      "key": "Retry-After",
-                      "value": "6322",
+                      "disabled": false,
                       "description": {
                         "content": "Время, через которое еще раз нужно сделать запрос",
                         "type": "text/plain"
-                      }
+                      },
+                      "key": "Retry-After",
+                      "value": "6322"
                     }
                   ],
                   "cookie": [],
@@ -550,8 +556,7 @@
                 }
               ]
             }
-          ],
-          "id": "bcac33a4-c7e0-4ea9-a3a7-412855fb209d"
+          ]
         },
         {
           "name": "get",
@@ -561,17 +566,9 @@
               "item": [
                 {
                   "name": "Получение анкеты пользователя",
-                  "id": "0eac121c-1734-4df5-aaad-6290bba22469",
                   "request": {
                     "auth": {
-                      "type": "bearer",
-                      "bearer": [
-                        {
-                          "key": "token",
-                          "value": "{{token}}",
-                          "type": "string"
-                        }
-                      ]
+                      "type": "noauth"
                     },
                     "method": "GET",
                     "header": [
@@ -581,28 +578,20 @@
                       }
                     ],
                     "url": {
-                      "raw": "{{baseUrl}}/user/get/:id",
+                      "raw": "{{baseUrl}}/user/get/{{user_id}}",
                       "host": [
                         "{{baseUrl}}"
                       ],
                       "path": [
                         "user",
                         "get",
-                        ":id"
-                      ],
-                      "variable": [
-                        {
-                          "key": "id",
-                          "value": "ebb6f392-6835-4535-9516-e3ca7815e416",
-                          "description": "Идентификатор пользователя"
-                        }
+                        "{{user_id}}"
                       ]
                     },
                     "description": "Получение анкеты пользователя"
                   },
                   "response": [
                     {
-                      "id": "cc1d63e5-ba6c-48fe-9cde-7d5f3729c995",
                       "name": "Успешное получение анкеты пользователя",
                       "originalRequest": {
                         "method": "GET",
@@ -644,7 +633,6 @@
                       "body": "{\n  \"id\": \"string\",\n  \"first_name\": \"Имя\",\n  \"second_name\": \"Фамилия\",\n  \"birthdate\": \"2017-02-01\",\n  \"biography\": \"Хобби, интересы и т.п.\",\n  \"city\": \"Москва\"\n}"
                     },
                     {
-                      "id": "7b7827b0-3d5a-4531-898c-992c48788cd4",
                       "name": "Невалидные данные",
                       "originalRequest": {
                         "method": "GET",
@@ -676,7 +664,6 @@
                       "body": ""
                     },
                     {
-                      "id": "1e9795c1-1d80-40d3-9f67-228731554aee",
                       "name": "Анкета не найдена",
                       "originalRequest": {
                         "method": "GET",
@@ -708,7 +695,6 @@
                       "body": ""
                     },
                     {
-                      "id": "8b46c685-3ec4-4c8a-b30c-95ddac28baab",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "GET",
@@ -746,19 +732,19 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
                       "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
                     },
                     {
-                      "id": "b49daa9f-0251-47b7-8c4d-3e3868ad38d8",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "GET",
@@ -796,12 +782,13 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
@@ -809,19 +796,19 @@
                     }
                   ]
                 }
-              ],
-              "id": "17a69d30-83c5-470e-bfe0-458e7a2d2ef6"
+              ]
             }
-          ],
-          "id": "739221da-e4cb-4eff-bd56-18b7b903a7d2"
+          ]
         },
         {
           "name": "search",
           "item": [
             {
               "name": "Поиск анкет",
-              "id": "28c78c4b-1d2f-4c94-b903-107e1c6e7305",
               "request": {
+                "auth": {
+                  "type": "noauth"
+                },
                 "method": "GET",
                 "header": [
                   {
@@ -830,7 +817,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/user/search?first_name=Конст&last_name=Оси",
+                  "raw": "{{baseUrl}}/user/search?first_name=Евгений&last_name=Фоминых",
                   "host": [
                     "{{baseUrl}}"
                   ],
@@ -841,12 +828,12 @@
                   "query": [
                     {
                       "key": "first_name",
-                      "value": "Конст",
+                      "value": "Евгений",
                       "description": "Условие поиска по имени"
                     },
                     {
                       "key": "last_name",
-                      "value": "Оси",
+                      "value": "Фоминых",
                       "description": "Условие поиска по фамилии"
                     }
                   ]
@@ -855,7 +842,6 @@
               },
               "response": [
                 {
-                  "id": "f39bfad6-8ffa-48a6-a9e2-fb213deda25e",
                   "name": "Успешные поиск пользователя",
                   "originalRequest": {
                     "method": "GET",
@@ -876,14 +862,14 @@
                       ],
                       "query": [
                         {
+                          "description": "Условие поиска по имени",
                           "key": "first_name",
-                          "value": "Конст",
-                          "description": "Условие поиска по имени"
+                          "value": "Конст"
                         },
                         {
+                          "description": "Условие поиска по фамилии",
                           "key": "last_name",
-                          "value": "Оси",
-                          "description": "Условие поиска по фамилии"
+                          "value": "Оси"
                         }
                       ]
                     }
@@ -901,7 +887,6 @@
                   "body": "[\n  {\n    \"id\": \"string\",\n    \"first_name\": \"Имя\",\n    \"second_name\": \"Фамилия\",\n    \"birthdate\": \"2017-02-01\",\n    \"biography\": \"Хобби, интересы и т.п.\",\n    \"city\": \"Москва\"\n  },\n  {\n    \"id\": \"string\",\n    \"first_name\": \"Имя\",\n    \"second_name\": \"Фамилия\",\n    \"birthdate\": \"2017-02-01\",\n    \"biography\": \"Хобби, интересы и т.п.\",\n    \"city\": \"Москва\"\n  }\n]"
                 },
                 {
-                  "id": "414d08aa-3347-42a4-a9cc-8c5baa269db0",
                   "name": "Невалидные данные",
                   "originalRequest": {
                     "method": "GET",
@@ -917,14 +902,14 @@
                       ],
                       "query": [
                         {
+                          "description": "Условие поиска по имени",
                           "key": "first_name",
-                          "value": "Конст",
-                          "description": "Условие поиска по имени"
+                          "value": "Конст"
                         },
                         {
+                          "description": "Условие поиска по фамилии",
                           "key": "last_name",
-                          "value": "Оси",
-                          "description": "Условие поиска по фамилии"
+                          "value": "Оси"
                         }
                       ]
                     }
@@ -937,7 +922,6 @@
                   "body": ""
                 },
                 {
-                  "id": "62c22b47-265e-4f66-81b0-8fc26988d4ec",
                   "name": "Ошибка сервера",
                   "originalRequest": {
                     "method": "GET",
@@ -958,14 +942,14 @@
                       ],
                       "query": [
                         {
+                          "description": "Условие поиска по имени",
                           "key": "first_name",
-                          "value": "Конст",
-                          "description": "Условие поиска по имени"
+                          "value": "Конст"
                         },
                         {
+                          "description": "Условие поиска по фамилии",
                           "key": "last_name",
-                          "value": "Оси",
-                          "description": "Условие поиска по фамилии"
+                          "value": "Оси"
                         }
                       ]
                     }
@@ -979,19 +963,19 @@
                       "value": "application/json"
                     },
                     {
-                      "key": "Retry-After",
-                      "value": "6322",
+                      "disabled": false,
                       "description": {
                         "content": "Время, через которое еще раз нужно сделать запрос",
                         "type": "text/plain"
-                      }
+                      },
+                      "key": "Retry-After",
+                      "value": "6322"
                     }
                   ],
                   "cookie": [],
                   "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
                 },
                 {
-                  "id": "9b7504a8-fec3-4c91-9d82-22e3aeb5d59a",
                   "name": "Ошибка сервера",
                   "originalRequest": {
                     "method": "GET",
@@ -1012,14 +996,14 @@
                       ],
                       "query": [
                         {
+                          "description": "Условие поиска по имени",
                           "key": "first_name",
-                          "value": "Конст",
-                          "description": "Условие поиска по имени"
+                          "value": "Конст"
                         },
                         {
+                          "description": "Условие поиска по фамилии",
                           "key": "last_name",
-                          "value": "Оси",
-                          "description": "Условие поиска по фамилии"
+                          "value": "Оси"
                         }
                       ]
                     }
@@ -1033,12 +1017,13 @@
                       "value": "application/json"
                     },
                     {
-                      "key": "Retry-After",
-                      "value": "6322",
+                      "disabled": false,
                       "description": {
                         "content": "Время, через которое еще раз нужно сделать запрос",
                         "type": "text/plain"
-                      }
+                      },
+                      "key": "Retry-After",
+                      "value": "6322"
                     }
                   ],
                   "cookie": [],
@@ -1046,11 +1031,9 @@
                 }
               ]
             }
-          ],
-          "id": "cdd5966a-818e-4ab1-b504-e170d22d4c8d"
+          ]
         }
-      ],
-      "id": "efbb3a58-ad0a-4b80-ba97-0e9ce4a803be"
+      ]
     },
     {
       "name": "friend",
@@ -1063,14 +1046,13 @@
               "item": [
                 {
                   "name": "/friend/set/:user_id",
-                  "id": "86bec0aa-c23c-41a6-87c5-455011ce6f99",
                   "request": {
                     "auth": {
                       "type": "bearer",
                       "bearer": [
                         {
                           "key": "token",
-                          "value": "{{bearerToken}}",
+                          "value": "{{token}}",
                           "type": "string"
                         }
                       ]
@@ -1095,22 +1077,21 @@
                       "variable": [
                         {
                           "key": "user_id",
-                          "value": "string"
+                          "value": "7601a5ac-d22d-496e-8377-8fe1af9034cb"
                         }
                       ]
                     }
                   },
                   "response": [
                     {
-                      "id": "1a9fd093-5594-4fd7-8581-32667558d636",
                       "name": "Пользователь успешно указал своего друга",
                       "originalRequest": {
                         "method": "PUT",
                         "header": [
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -1139,15 +1120,14 @@
                       "body": ""
                     },
                     {
-                      "id": "25449a29-7fbc-46f1-b575-4642d85a0636",
                       "name": "Невалидные данные ввода",
                       "originalRequest": {
                         "method": "PUT",
                         "header": [
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -1176,15 +1156,14 @@
                       "body": ""
                     },
                     {
-                      "id": "55585dad-78e1-43d9-9522-79ef34685b1a",
                       "name": "Неавторизованный доступ",
                       "originalRequest": {
                         "method": "PUT",
                         "header": [
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -1213,7 +1192,6 @@
                       "body": ""
                     },
                     {
-                      "id": "40c33024-6daf-44ca-aa52-76235011970e",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "PUT",
@@ -1223,9 +1201,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -1255,19 +1233,19 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
                       "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
                     },
                     {
-                      "id": "d70dd48a-84a4-4a4e-9b9f-51366dc6e955",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "PUT",
@@ -1277,9 +1255,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -1309,12 +1287,13 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
@@ -1322,11 +1301,9 @@
                     }
                   ]
                 }
-              ],
-              "id": "9528caf5-a23a-41e6-b591-9137a71eaf60"
+              ]
             }
-          ],
-          "id": "73b6d7e7-39f4-4d56-a765-59e499041cf5"
+          ]
         },
         {
           "name": "delete",
@@ -1336,14 +1313,13 @@
               "item": [
                 {
                   "name": "/friend/delete/:user_id",
-                  "id": "0f7b8f8b-aa6b-4536-a70b-90c14e5d8746",
                   "request": {
                     "auth": {
                       "type": "bearer",
                       "bearer": [
                         {
                           "key": "token",
-                          "value": "{{bearerToken}}",
+                          "value": "{{token}}",
                           "type": "string"
                         }
                       ]
@@ -1368,22 +1344,21 @@
                       "variable": [
                         {
                           "key": "user_id",
-                          "value": "string"
+                          "value": "4a352aba-2d67-4d16-a6be-b113926f0f52"
                         }
                       ]
                     }
                   },
                   "response": [
                     {
-                      "id": "ed34d66f-a6db-4677-9598-b6808d195a0d",
                       "name": "Пользователь успешно удалил из друзей пользователя",
                       "originalRequest": {
                         "method": "PUT",
                         "header": [
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -1412,15 +1387,14 @@
                       "body": ""
                     },
                     {
-                      "id": "7f72225e-f073-497f-bced-569ee59e8c7f",
                       "name": "Невалидные данные ввода",
                       "originalRequest": {
                         "method": "PUT",
                         "header": [
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -1449,15 +1423,14 @@
                       "body": ""
                     },
                     {
-                      "id": "44e5f81d-58fb-48f0-8f0f-8d0815b1654b",
                       "name": "Неавторизованный доступ",
                       "originalRequest": {
                         "method": "PUT",
                         "header": [
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -1486,7 +1459,6 @@
                       "body": ""
                     },
                     {
-                      "id": "e58841b2-a645-46d5-8bee-960bd8740864",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "PUT",
@@ -1496,9 +1468,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -1528,19 +1500,19 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
                       "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
                     },
                     {
-                      "id": "ebab4f9f-bee1-44d1-bd4a-bebc7968c577",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "PUT",
@@ -1550,9 +1522,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -1582,12 +1554,13 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
@@ -1595,14 +1568,11 @@
                     }
                   ]
                 }
-              ],
-              "id": "de4f97ae-51aa-4035-9573-bbfcd1c351f6"
+              ]
             }
-          ],
-          "id": "2f3f735d-c3c2-4876-b795-cca356d73f13"
+          ]
         }
-      ],
-      "id": "9e0e9a15-a7a9-431f-8ed9-554b6e348b34"
+      ]
     },
     {
       "name": "post",
@@ -1612,14 +1582,13 @@
           "item": [
             {
               "name": "/post/create",
-              "id": "ec5ee975-8ad0-414d-a2e8-28f09ec29a1d",
               "request": {
                 "auth": {
                   "type": "bearer",
                   "bearer": [
                     {
                       "key": "token",
-                      "value": "{{bearerToken}}",
+                      "value": "{{token}}",
                       "type": "string"
                     }
                   ]
@@ -1637,7 +1606,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"text\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lectus mauris ultrices eros in cursus turpis massa.\"\n}",
+                  "raw": "{\n  \"text\": \"aaaaaadasdasdsadasdasd\",\n  \"author_user_id\": \"7601a5ac-d22d-496e-8377-8fe1af9034cb\"\n}",
                   "options": {
                     "raw": {
                       "headerFamily": "json",
@@ -1658,7 +1627,6 @@
               },
               "response": [
                 {
-                  "id": "5482e602-94f8-4055-b8c3-6d243f4ab4ae",
                   "name": "Успешно создан пост",
                   "originalRequest": {
                     "method": "POST",
@@ -1672,9 +1640,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "body": {
@@ -1711,7 +1679,6 @@
                   "body": "1d535fd6-7521-4cb1-aa6d-031be7123c4d"
                 },
                 {
-                  "id": "0329598c-985c-47b4-bbec-177572cb9e24",
                   "name": "Невалидные данные ввода",
                   "originalRequest": {
                     "method": "POST",
@@ -1721,9 +1688,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "body": {
@@ -1755,7 +1722,6 @@
                   "body": ""
                 },
                 {
-                  "id": "c6449a90-f317-4cf4-8777-2716d27eb6e7",
                   "name": "Неавторизованный доступ",
                   "originalRequest": {
                     "method": "POST",
@@ -1765,9 +1731,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "body": {
@@ -1799,7 +1765,6 @@
                   "body": ""
                 },
                 {
-                  "id": "3bcbfb57-3cba-4438-bbc6-346c759e6205",
                   "name": "Ошибка сервера",
                   "originalRequest": {
                     "method": "POST",
@@ -1813,9 +1778,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "body": {
@@ -1848,19 +1813,19 @@
                       "value": "application/json"
                     },
                     {
-                      "key": "Retry-After",
-                      "value": "6322",
+                      "disabled": false,
                       "description": {
                         "content": "Время, через которое еще раз нужно сделать запрос",
                         "type": "text/plain"
-                      }
+                      },
+                      "key": "Retry-After",
+                      "value": "6322"
                     }
                   ],
                   "cookie": [],
                   "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
                 },
                 {
-                  "id": "035672e0-22ac-4fad-b1ee-00c12ec47902",
                   "name": "Ошибка сервера",
                   "originalRequest": {
                     "method": "POST",
@@ -1874,9 +1839,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "body": {
@@ -1909,12 +1874,13 @@
                       "value": "application/json"
                     },
                     {
-                      "key": "Retry-After",
-                      "value": "6322",
+                      "disabled": false,
                       "description": {
                         "content": "Время, через которое еще раз нужно сделать запрос",
                         "type": "text/plain"
-                      }
+                      },
+                      "key": "Retry-After",
+                      "value": "6322"
                     }
                   ],
                   "cookie": [],
@@ -1922,22 +1888,20 @@
                 }
               ]
             }
-          ],
-          "id": "53e1eed5-d3f2-49fb-9fc6-303d857eb750"
+          ]
         },
         {
           "name": "update",
           "item": [
             {
               "name": "/post/update",
-              "id": "5a8386c2-ad92-443b-9cfb-c8193f553712",
               "request": {
                 "auth": {
                   "type": "bearer",
                   "bearer": [
                     {
                       "key": "token",
-                      "value": "{{bearerToken}}",
+                      "value": "{{token}}",
                       "type": "string"
                     }
                   ]
@@ -1955,7 +1919,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"id\": \"1d535fd6-7521-4cb1-aa6d-031be7123c4d\",\n  \"text\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lectus mauris ultrices eros in cursus turpis massa.\"\n}",
+                  "raw": "{\n  \"id\": \"2ba06094-62fc-4afd-853d-d765827aa2eb\",\n  \"text\": \"LOLE\"\n}",
                   "options": {
                     "raw": {
                       "headerFamily": "json",
@@ -1976,7 +1940,6 @@
               },
               "response": [
                 {
-                  "id": "6404bc77-3cba-4ab1-9e35-040203841e7f",
                   "name": "Успешно изменен пост",
                   "originalRequest": {
                     "method": "PUT",
@@ -1986,9 +1949,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "body": {
@@ -2020,7 +1983,6 @@
                   "body": ""
                 },
                 {
-                  "id": "b4639fb0-1564-42f9-adff-d31acb39443a",
                   "name": "Невалидные данные ввода",
                   "originalRequest": {
                     "method": "PUT",
@@ -2030,9 +1992,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "body": {
@@ -2064,7 +2026,6 @@
                   "body": ""
                 },
                 {
-                  "id": "6cf562be-8be7-4064-83f9-cc2bd1f5c57b",
                   "name": "Неавторизованный доступ",
                   "originalRequest": {
                     "method": "PUT",
@@ -2074,9 +2035,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "body": {
@@ -2108,7 +2069,6 @@
                   "body": ""
                 },
                 {
-                  "id": "ab4025ea-50a5-4e82-ad72-9ed02225b6ce",
                   "name": "Ошибка сервера",
                   "originalRequest": {
                     "method": "PUT",
@@ -2122,9 +2082,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "body": {
@@ -2157,19 +2117,19 @@
                       "value": "application/json"
                     },
                     {
-                      "key": "Retry-After",
-                      "value": "6322",
+                      "disabled": false,
                       "description": {
                         "content": "Время, через которое еще раз нужно сделать запрос",
                         "type": "text/plain"
-                      }
+                      },
+                      "key": "Retry-After",
+                      "value": "6322"
                     }
                   ],
                   "cookie": [],
                   "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
                 },
                 {
-                  "id": "fd264cb2-4b39-4f68-8f80-207a5566a774",
                   "name": "Ошибка сервера",
                   "originalRequest": {
                     "method": "PUT",
@@ -2183,9 +2143,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "body": {
@@ -2218,12 +2178,13 @@
                       "value": "application/json"
                     },
                     {
-                      "key": "Retry-After",
-                      "value": "6322",
+                      "disabled": false,
                       "description": {
                         "content": "Время, через которое еще раз нужно сделать запрос",
                         "type": "text/plain"
-                      }
+                      },
+                      "key": "Retry-After",
+                      "value": "6322"
                     }
                   ],
                   "cookie": [],
@@ -2231,8 +2192,7 @@
                 }
               ]
             }
-          ],
-          "id": "fdc764d9-c483-43c4-b3fc-53009f1a2705"
+          ]
         },
         {
           "name": "delete",
@@ -2242,14 +2202,13 @@
               "item": [
                 {
                   "name": "/post/delete/:id",
-                  "id": "3116c241-cb07-47e1-a396-10d86ee5de25",
                   "request": {
                     "auth": {
                       "type": "bearer",
                       "bearer": [
                         {
                           "key": "token",
-                          "value": "{{bearerToken}}",
+                          "value": "{{token}}",
                           "type": "string"
                         }
                       ]
@@ -2274,22 +2233,21 @@
                       "variable": [
                         {
                           "key": "id",
-                          "value": "1d535fd6-7521-4cb1-aa6d-031be7123c4d"
+                          "value": "0a6d0780-0345-4e50-8700-d66c4c897a21"
                         }
                       ]
                     }
                   },
                   "response": [
                     {
-                      "id": "f0cb5e85-07fa-4caa-83b9-54a046b060eb",
                       "name": "Успешно удален пост",
                       "originalRequest": {
                         "method": "PUT",
                         "header": [
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -2318,15 +2276,14 @@
                       "body": ""
                     },
                     {
-                      "id": "f5bc9e5f-a115-4b00-9a18-579be96f35b6",
                       "name": "Невалидные данные ввода",
                       "originalRequest": {
                         "method": "PUT",
                         "header": [
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -2355,15 +2312,14 @@
                       "body": ""
                     },
                     {
-                      "id": "d488cef9-6efc-4dca-a455-ff755188b44b",
                       "name": "Неавторизованный доступ",
                       "originalRequest": {
                         "method": "PUT",
                         "header": [
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -2392,7 +2348,6 @@
                       "body": ""
                     },
                     {
-                      "id": "d75d4d36-0932-4db5-a26a-83b86942ad7a",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "PUT",
@@ -2402,9 +2357,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -2434,19 +2389,19 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
                       "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
                     },
                     {
-                      "id": "0cefc491-1902-4545-917a-925930a95924",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "PUT",
@@ -2456,9 +2411,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -2488,12 +2443,13 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
@@ -2501,11 +2457,9 @@
                     }
                   ]
                 }
-              ],
-              "id": "f20b0048-3a2b-47bf-850a-efe805b89657"
+              ]
             }
-          ],
-          "id": "d1f3ace5-a949-46dd-a2a0-e962f9308c3c"
+          ]
         },
         {
           "name": "get",
@@ -2515,8 +2469,17 @@
               "item": [
                 {
                   "name": "/post/get/:id",
-                  "id": "31ac97b9-6c5d-40e3-81f5-70bb7189120a",
                   "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
                     "method": "GET",
                     "header": [
                       {
@@ -2537,14 +2500,13 @@
                       "variable": [
                         {
                           "key": "id",
-                          "value": "1d535fd6-7521-4cb1-aa6d-031be7123c4d"
+                          "value": "a18aa727-5a7f-43a7-b24d-8aca22b80bb3"
                         }
                       ]
                     }
                   },
                   "response": [
                     {
-                      "id": "c5f6acf2-7289-484d-9050-2d3e6ed08869",
                       "name": "Успешно получен пост",
                       "originalRequest": {
                         "method": "GET",
@@ -2585,7 +2547,6 @@
                       "body": "{\n  \"id\": \"1d535fd6-7521-4cb1-aa6d-031be7123c4d\",\n  \"text\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lectus mauris ultrices eros in cursus turpis massa.\",\n  \"author_user_id\": \"string\"\n}"
                     },
                     {
-                      "id": "927bdae5-362a-413d-9177-17be62306374",
                       "name": "Невалидные данные ввода",
                       "originalRequest": {
                         "method": "GET",
@@ -2616,7 +2577,6 @@
                       "body": ""
                     },
                     {
-                      "id": "bd7bba23-504f-43a8-adac-7c827e613fe0",
                       "name": "Неавторизованный доступ",
                       "originalRequest": {
                         "method": "GET",
@@ -2647,7 +2607,6 @@
                       "body": ""
                     },
                     {
-                      "id": "0842fcff-6e24-48d5-b45f-d6a42fe81023",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "GET",
@@ -2684,19 +2643,19 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
                       "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
                     },
                     {
-                      "id": "f9e81adb-4567-4dc5-aafa-b74ce3a7c078",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "GET",
@@ -2733,12 +2692,13 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
@@ -2746,25 +2706,22 @@
                     }
                   ]
                 }
-              ],
-              "id": "01d5ff6f-fa31-4524-b273-1676d1735c6c"
+              ]
             }
-          ],
-          "id": "9f7c6e16-ca9c-46e1-9c0f-b72437714a4e"
+          ]
         },
         {
           "name": "feed",
           "item": [
             {
               "name": "/post/feed",
-              "id": "628a3f47-e164-4dff-964d-135b467ae488",
               "request": {
                 "auth": {
                   "type": "bearer",
                   "bearer": [
                     {
                       "key": "token",
-                      "value": "{{bearerToken}}",
+                      "value": "{{token}}",
                       "type": "string"
                     }
                   ]
@@ -2777,7 +2734,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/post/feed?offset=100&limit=10",
+                  "raw": "{{baseUrl}}/post/feed?offset=0&limit=10",
                   "host": [
                     "{{baseUrl}}"
                   ],
@@ -2788,7 +2745,7 @@
                   "query": [
                     {
                       "key": "offset",
-                      "value": "100"
+                      "value": "0"
                     },
                     {
                       "key": "limit",
@@ -2799,7 +2756,6 @@
               },
               "response": [
                 {
-                  "id": "68a1c207-271a-4061-9199-d48fdaf61a1a",
                   "name": "Успешно получены посты друзей",
                   "originalRequest": {
                     "method": "GET",
@@ -2809,9 +2765,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "url": {
@@ -2848,15 +2804,14 @@
                   "body": "[\n  {\n    \"id\": \"1d535fd6-7521-4cb1-aa6d-031be7123c4d\",\n    \"text\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lectus mauris ultrices eros in cursus turpis massa.\",\n    \"author_user_id\": \"string\"\n  },\n  {\n    \"id\": \"1d535fd6-7521-4cb1-aa6d-031be7123c4d\",\n    \"text\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lectus mauris ultrices eros in cursus turpis massa.\",\n    \"author_user_id\": \"string\"\n  }\n]"
                 },
                 {
-                  "id": "770b1321-c298-4259-bed3-0d6c01502763",
                   "name": "Невалидные данные ввода",
                   "originalRequest": {
                     "method": "GET",
                     "header": [
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "url": {
@@ -2888,15 +2843,14 @@
                   "body": ""
                 },
                 {
-                  "id": "c10f9387-bac3-4825-b9e8-c44b8750fe01",
                   "name": "Неавторизованный доступ",
                   "originalRequest": {
                     "method": "GET",
                     "header": [
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "url": {
@@ -2928,7 +2882,6 @@
                   "body": ""
                 },
                 {
-                  "id": "a8eea55c-a389-4a41-8606-247a72c5b7ff",
                   "name": "Ошибка сервера",
                   "originalRequest": {
                     "method": "GET",
@@ -2938,9 +2891,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "url": {
@@ -2973,19 +2926,19 @@
                       "value": "application/json"
                     },
                     {
-                      "key": "Retry-After",
-                      "value": "6322",
+                      "disabled": false,
                       "description": {
                         "content": "Время, через которое еще раз нужно сделать запрос",
                         "type": "text/plain"
-                      }
+                      },
+                      "key": "Retry-After",
+                      "value": "6322"
                     }
                   ],
                   "cookie": [],
                   "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
                 },
                 {
-                  "id": "2da25cf8-cd28-4a9a-9bb7-e36411c5ba0e",
                   "name": "Ошибка сервера",
                   "originalRequest": {
                     "method": "GET",
@@ -2995,9 +2948,9 @@
                         "value": "application/json"
                       },
                       {
+                        "description": "Added as a part of security scheme: bearer",
                         "key": "Authorization",
-                        "value": "Bearer <token>",
-                        "description": "Added as a part of security scheme: bearer"
+                        "value": "Bearer <token>"
                       }
                     ],
                     "url": {
@@ -3030,12 +2983,13 @@
                       "value": "application/json"
                     },
                     {
-                      "key": "Retry-After",
-                      "value": "6322",
+                      "disabled": false,
                       "description": {
                         "content": "Время, через которое еще раз нужно сделать запрос",
                         "type": "text/plain"
-                      }
+                      },
+                      "key": "Retry-After",
+                      "value": "6322"
                     }
                   ],
                   "cookie": [],
@@ -3043,11 +2997,9 @@
                 }
               ]
             }
-          ],
-          "id": "8b79f3dd-c86e-4ab7-a5a5-e84ec57a1a57"
+          ]
         }
-      ],
-      "id": "9fcfbac1-5cdb-442e-9cf8-44f8a6ca0239"
+      ]
     },
     {
       "name": "dialog",
@@ -3060,7 +3012,6 @@
               "item": [
                 {
                   "name": "/dialog/:user_id/send",
-                  "id": "8d8e3223-dc17-4557-adb8-2f80a2ebae60",
                   "request": {
                     "auth": {
                       "type": "bearer",
@@ -3113,7 +3064,6 @@
                   },
                   "response": [
                     {
-                      "id": "7ca1a7d2-c1cc-42d3-b62c-891053a7df6d",
                       "name": "Успешно отправлено сообщение",
                       "originalRequest": {
                         "method": "POST",
@@ -3123,9 +3073,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "body": {
@@ -3164,7 +3114,6 @@
                       "body": ""
                     },
                     {
-                      "id": "b48fb822-f3ea-424e-8fee-1490a68ce929",
                       "name": "Невалидные данные ввода",
                       "originalRequest": {
                         "method": "POST",
@@ -3174,9 +3123,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "body": {
@@ -3215,7 +3164,6 @@
                       "body": ""
                     },
                     {
-                      "id": "44b2e191-010f-4263-aea7-f4bb08e0d0c7",
                       "name": "Неавторизованный доступ",
                       "originalRequest": {
                         "method": "POST",
@@ -3225,9 +3173,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "body": {
@@ -3266,7 +3214,6 @@
                       "body": ""
                     },
                     {
-                      "id": "542e9622-61d7-4817-83b5-0cad6ef6096d",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "POST",
@@ -3280,9 +3227,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "body": {
@@ -3322,19 +3269,19 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
                       "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
                     },
                     {
-                      "id": "7676d36a-af28-4f20-9579-e710992f5686",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "POST",
@@ -3348,9 +3295,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "body": {
@@ -3390,12 +3337,13 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
@@ -3403,15 +3351,13 @@
                     }
                   ]
                 }
-              ],
-              "id": "cf14e242-766d-4094-ba18-7ebd5b980bff"
+              ]
             },
             {
               "name": "list",
               "item": [
                 {
                   "name": "/dialog/:user_id/list",
-                  "id": "08ddba54-eb81-4ebd-81b6-6d26d5fd24a8",
                   "request": {
                     "auth": {
                       "type": "bearer",
@@ -3450,7 +3396,6 @@
                   },
                   "response": [
                     {
-                      "id": "d994e424-8e10-4498-af7a-7aaff72115de",
                       "name": "Диалог между двумя пользователями",
                       "originalRequest": {
                         "method": "GET",
@@ -3460,9 +3405,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -3496,15 +3441,14 @@
                       "body": "[\n  {\n    \"from\": \"string\",\n    \"to\": \"string\",\n    \"text\": \"Привет, как дела?\"\n  },\n  {\n    \"from\": \"string\",\n    \"to\": \"string\",\n    \"text\": \"Привет, как дела?\"\n  }\n]"
                     },
                     {
-                      "id": "10276e53-238f-4dcd-bab4-1b287b6adbf0",
                       "name": "Невалидные данные ввода",
                       "originalRequest": {
                         "method": "GET",
                         "header": [
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -3533,15 +3477,14 @@
                       "body": ""
                     },
                     {
-                      "id": "172a2bad-57ce-4a53-aeea-16f177187f51",
                       "name": "Неавторизованный доступ",
                       "originalRequest": {
                         "method": "GET",
                         "header": [
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -3570,7 +3513,6 @@
                       "body": ""
                     },
                     {
-                      "id": "ae3cfa27-8d40-4db9-85c2-c9f7ec46fc94",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "GET",
@@ -3580,9 +3522,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -3612,19 +3554,19 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
                       "body": "{\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"code\": 845\n}"
                     },
                     {
-                      "id": "3072b455-4cf3-404a-a757-0d2d3db2334a",
                       "name": "Ошибка сервера",
                       "originalRequest": {
                         "method": "GET",
@@ -3634,9 +3576,9 @@
                             "value": "application/json"
                           },
                           {
+                            "description": "Added as a part of security scheme: bearer",
                             "key": "Authorization",
-                            "value": "Bearer <token>",
-                            "description": "Added as a part of security scheme: bearer"
+                            "value": "Bearer <token>"
                           }
                         ],
                         "url": {
@@ -3666,12 +3608,13 @@
                           "value": "application/json"
                         },
                         {
-                          "key": "Retry-After",
-                          "value": "6322",
+                          "disabled": false,
                           "description": {
                             "content": "Время, через которое еще раз нужно сделать запрос",
                             "type": "text/plain"
-                          }
+                          },
+                          "key": "Retry-After",
+                          "value": "6322"
                         }
                       ],
                       "cookie": [],
@@ -3679,19 +3622,57 @@
                     }
                   ]
                 }
-              ],
-              "id": "68cca79f-6196-4434-8e06-57ea7a713862"
+              ]
             }
-          ],
-          "id": "6ce4e104-df15-4106-a0c7-968e827c312f"
+          ]
         }
-      ],
-      "id": "d4b79a79-f5da-43c9-9b75-0d593fe8002c"
+      ]
+    },
+    {
+      "name": "health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/actuator/health",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "actuator",
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "actuator",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/actuator",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "actuator"
+          ]
+        }
+      },
+      "response": []
     }
   ],
   "variable": [
     {
-      "id": "fbeeb579-4cb3-4ae3-967c-f563ebcef364",
       "key": "baseUrl",
       "value": "/"
     }
