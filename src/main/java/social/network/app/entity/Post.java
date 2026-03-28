@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
@@ -17,4 +18,6 @@ public class Post {
     private String text;
     @JsonProperty("author_user_id")
     private UUID authorUserId;
+    @JsonProperty("author_user_id")
+    private OffsetDateTime createdAt;
 }

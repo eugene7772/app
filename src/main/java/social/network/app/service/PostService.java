@@ -2,17 +2,14 @@ package social.network.app.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import social.network.app.dto.PostCreateRequest;
-import social.network.app.dto.PostResponse;
 import social.network.app.dto.PostUpdateRequest;
+import social.network.app.entity.Post;
 import social.network.app.mapper.PostMapper;
 import social.network.app.repository.PostRepository;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -23,28 +20,28 @@ public class PostService {
     @Autowired
     private PostMapper postMapper;
 
-    @Transactional
     public UUID create(PostCreateRequest postCreateRequest) {
         return postRepository.save(postMapper.toEntity(postCreateRequest));
     }
 
-    @Transactional
     public void update(PostUpdateRequest postUpdateRequest) {
+        postRepository.update(postMapper.toEntity(postUpdateRequest));
     }
 
-    @Transactional
     public void delete(UUID id) {
+        postRepository.delete(id);
     }
 
-    @Transactional
-    public PostResponse get(UUID id) {
-        return null;
+    public Post get(UUID id) {
+        return postRepository.get(id).orElse(null);
     }
 
-    @Transactional
-    @Cacheable(value = "feed", key = "#offset + '_' + #limit")
-    public List<PostResponse> feed(Integer offset, Integer limit) {
-        return null;
+    public List<Post> getAllLastPostsByUsers(List<UUID> allIds) {
+        return postRepository.getAllLastPostsByUsers(allIds);
+    }
+
+    public List<Post> findAll(List<UUID> postIds) {
+        return postRepository.findAll(postIds);
     }
 
 }

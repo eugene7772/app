@@ -1,4 +1,4 @@
-package social.network.app.service;
+package social.network.app.service.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

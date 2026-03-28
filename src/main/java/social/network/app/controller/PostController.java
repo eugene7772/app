@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import social.network.app.dto.PostCreateRequest;
 import social.network.app.dto.PostResponse;
 import social.network.app.dto.PostUpdateRequest;
-import social.network.app.service.PostService;
+import social.network.app.service.application.PostApplicationService;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,35 +19,35 @@ import java.util.UUID;
 public class PostController {
 
     @Autowired
-    private PostService postService;
+    private PostApplicationService postApplicationService;
 
     @PostMapping(value = "/create")
     public ResponseEntity<String> create(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody PostCreateRequest postCreateRequest) {
-        String postId = postService.create(postCreateRequest).toString();
+        String postId = postApplicationService.create(UUID.fromString(jwt.getSubject()), postCreateRequest).toString();
         return ResponseEntity.ok(postId);
     }
 
     @PutMapping(value = "/update")
     public ResponseEntity<String> update(@Valid @RequestBody PostUpdateRequest postUpdateRequest) {
-        postService.update(postUpdateRequest);
+        postApplicationService.update(postUpdateRequest);
         return ResponseEntity.ok("Post updated");
     }
 
     @PutMapping(value = "/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") UUID id) {
-        postService.delete(id);
+    public ResponseEntity<String> delete(@AuthenticationPrincipal Jwt jwt, @PathVariable("id") UUID id) {
+        postApplicationService.delete(UUID.fromString(jwt.getSubject()), id);
         return ResponseEntity.ok("Post deleted");
     }
 
     @GetMapping(value = "/get/{id}")
     public ResponseEntity<String> get(@PathVariable("id") UUID id) {
-        PostResponse postResponse = postService.get(id);
+        PostResponse postResponse = postApplicationService.get(id);
         return ResponseEntity.ok(postResponse.toString());
     }
 
     @GetMapping(value = "/feed")
-    public ResponseEntity<List<PostResponse>> feed(@RequestParam("offset") Integer offset, @RequestParam("limit") Integer limit) {
-        List<PostResponse> posts = postService.feed(offset, limit);
+    public ResponseEntity<List<PostResponse>> feed(@AuthenticationPrincipal Jwt jwt, @RequestParam("offset") Integer offset, @RequestParam("limit") Integer limit) {
+        List<PostResponse> posts = postApplicationService.feed(UUID.fromString(jwt.getSubject()), offset, limit);
         return ResponseEntity.ok(posts);
     }
 

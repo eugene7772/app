@@ -2,7 +2,6 @@ package social.network.app.service;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +19,7 @@ import social.network.app.exception.UserNotFoundException;
 import social.network.app.exception.UserRegisterException;
 import social.network.app.mapper.UserMapper;
 import social.network.app.repository.UserRepository;
+import social.network.app.service.jwt.JwtService;
 
 import java.util.List;
 import java.util.UUID;

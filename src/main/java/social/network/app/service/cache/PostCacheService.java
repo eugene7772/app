@@ -1,4 +1,4 @@
-package social.network.app.service;
+package social.network.app.service.cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -38,16 +38,12 @@ public class PostCacheService {
         if (limit <= 0 || offset < 0) {
             return Collections.emptyList();
         }
-
         String key = buildFeedKey(userId);
-
         List<String> values = redisTemplate.opsForList()
                 .range(key, offset, offset + limit - 1);
-
         if (values == null || values.isEmpty()) {
             return Collections.emptyList();
         }
-
         return values.stream()
                 .map(UUID::fromString)
                 .toList();
@@ -57,16 +53,18 @@ public class PostCacheService {
         redisTemplate.delete(buildFeedKey(userId));
     }
 
-    public void evictManyFeeds(List<UUID> userIds) {
-        if (userIds == null || userIds.isEmpty()) {
+    public void rebuildUserFeed(UUID userId, List<UUID> postIds) {
+        String key = buildFeedKey(userId);
+        redisTemplate.delete(key);
+        if (postIds == null || postIds.isEmpty()) {
             return;
         }
-
-        List<String> keys = userIds.stream()
-                .map(this::buildFeedKey)
+        List<String> values = postIds.stream()
+                .limit(MAX_FEED_SIZE)
+                .map(UUID::toString)
                 .toList();
-
-        redisTemplate.delete(keys);
+        redisTemplate.opsForList().rightPushAll(key, values);
+        redisTemplate.expire(key, FEED_TTL);
     }
 
     public void removePostFromUserFeed(UUID userId, UUID postId) {
@@ -78,15 +76,9 @@ public class PostCacheService {
         if (userIds == null || userIds.isEmpty()) {
             return;
         }
-
         for (UUID userId : userIds) {
             removePostFromUserFeed(userId, postId);
         }
-    }
-
-    public boolean hasFeedCache(UUID userId) {
-        Boolean exists = redisTemplate.hasKey(buildFeedKey(userId));
-        return Boolean.TRUE.equals(exists);
     }
 
     private String buildFeedKey(UUID userId) {

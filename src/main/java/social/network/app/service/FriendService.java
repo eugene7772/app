@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import social.network.app.entity.Friend;
 import social.network.app.repository.FriendRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,6 +20,10 @@ public class FriendService {
 
     public void delete(UUID userId, UUID friendId) {
         friendRepository.delete(new Friend(userId, friendId));
+    }
+
+    public List<UUID> getAllById(UUID userId) {
+        return friendRepository.findById(userId);
     }
 
 }
