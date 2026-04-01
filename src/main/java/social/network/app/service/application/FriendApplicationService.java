@@ -25,7 +25,7 @@ public class FriendApplicationService {
     @Transactional
     public void follow(UUID userId, UUID friendId) {
         List<UUID> friends = friendService.getAllById(userId);
-        if (!friends.isEmpty()) {
+        if (friends.contains(friendId)) {
             log.warn("That friend is exist");
             return;
         }
