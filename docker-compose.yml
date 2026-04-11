@@ -10,17 +10,18 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql
-      - ./docker/db/init:/docker-entrypoint-initdb.d:ro
-      - ./docker/db/dump:/dump:ro
+      - ./core/docker/db/init:/docker-entrypoint-initdb.d:ro
+      - ./core/docker/db/dump:/dump:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U app -d app"]
       interval: 5s
       timeout: 3s
       retries: 20
-
-  app:
-    build: .
-    container_name: app-backend
+  core:
+    build:
+      context: .
+      dockerfile: core/Dockerfile
+    container_name: core-service
     depends_on:
       db:
         condition: service_healthy
@@ -31,16 +32,29 @@ services:
       SPRING_DATA_REDIS_HOST: ${SPRING_DATA_REDIS_HOST}
       SPRING_DATA_REDIS_PORT: ${SPRING_DATA_REDIS_PORT}
     ports:
-      - "8080:8080"
+      - "8081:8080"
 
-  redis:
-    image: redis:7
-    container_name: redis
+  auth:
+    build:
+      context: .
+      dockerfile: auth/Dockerfile
+    container_name: auth-service
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
+      - "8082:8080"
+
+  #redis:
+    #image: redis:7
+    #container_name: redis
+    #ports:
+      #- "6379:6379"
+    #volumes:
+      #- redis_data:/data
 
 volumes:
   pgdata:
   redis_data:
+  healthcheck-volume:

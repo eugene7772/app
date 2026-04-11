@@ -1,0 +1,93 @@
+version: "3.9"
+
+services:
+  citus-master:
+    image: citusdata/citus:latest
+    container_name: citus-master
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    ports:
+      - "5433:5432"
+    volumes:
+      - citus_master_data:/var/lib/postgresql
+      - ./docker/citus/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  citus-worker-1:
+    image: citusdata/citus:latest
+    container_name: citus-worker-1
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    ports:
+      - "5434:5432"
+    volumes:
+      - citus_worker1_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  citus-worker-2:
+    image: citusdata/citus:latest
+    container_name: citus-worker-2
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    ports:
+      - "5435:5432"
+    volumes:
+      - citus_worker2_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  citus-bootstrap:
+    image: postgres:18.1
+    container_name: citus-bootstrap
+    depends_on:
+      citus-master:
+        condition: service_healthy
+      citus-worker-1:
+        condition: service_healthy
+      citus-worker-2:
+        condition: service_healthy
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    volumes:
+      - ./docker/citus/bootstrap:/bootstrap:ro
+    entrypoint: ["/bin/bash", "/bootstrap/01-bootstrap.sh"]
+    restart: "no"
+
+  dialog:
+    build:
+      context: ..
+      dockerfile: dialog/Dockerfile
+    container_name: dialog-service
+    depends_on:
+      citus-bootstrap:
+        condition: service_completed_successfully
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://citus-master:5432/app
+      SPRING_DATASOURCE_USERNAME: app
+      SPRING_DATASOURCE_PASSWORD: app
+    ports:
+      - "8083:8080"
+
+volumes:
+  citus_master_data:
+  citus_worker1_data:
+  citus_worker2_data:

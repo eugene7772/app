@@ -35,5 +35,7 @@ postman/.postman/
 postman/postman/environments/
 postman/postman/globals/
 
-.env
-/volumes/
+core/.env
+/core/volumes/
+
+core/docker/db/dump/dump.backup
