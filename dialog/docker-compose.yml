@@ -3,7 +3,6 @@ version: "3.9"
 services:
   citus-master:
     image: citusdata/citus:latest
-    container_name: citus-master
     environment:
       POSTGRES_DB: app
       POSTGRES_USER: app
@@ -19,34 +18,14 @@ services:
       timeout: 3s
       retries: 20
 
-  citus-worker-1:
+  worker:
     image: citusdata/citus:latest
-    container_name: citus-worker-1
     environment:
       POSTGRES_DB: app
       POSTGRES_USER: app
       POSTGRES_PASSWORD: app
-    ports:
-      - "5434:5432"
     volumes:
-      - citus_worker1_data:/var/lib/postgresql
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U app -d app"]
-      interval: 5s
-      timeout: 3s
-      retries: 20
-
-  citus-worker-2:
-    image: citusdata/citus:latest
-    container_name: citus-worker-2
-    environment:
-      POSTGRES_DB: app
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: app
-    ports:
-      - "5435:5432"
-    volumes:
-      - citus_worker2_data:/var/lib/postgresql
+      - /var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U app -d app"]
       interval: 5s
@@ -54,22 +33,21 @@ services:
       retries: 20
 
   citus-bootstrap:
-    image: postgres:18.1
-    container_name: citus-bootstrap
+    image: docker:cli
     depends_on:
       citus-master:
         condition: service_healthy
-      citus-worker-1:
-        condition: service_healthy
-      citus-worker-2:
-        condition: service_healthy
+      worker:
+        condition: service_started
     environment:
       POSTGRES_DB: app
       POSTGRES_USER: app
       POSTGRES_PASSWORD: app
+      COMPOSE_PROJECT_NAME: citus
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ./docker/citus/bootstrap:/bootstrap:ro
-    entrypoint: ["/bin/bash", "/bootstrap/01-bootstrap.sh"]
+    entrypoint: ["/bin/sh", "/bootstrap/01-bootstrap.sh"]
     restart: "no"
 
   dialog:
@@ -89,5 +67,3 @@ services:
 
 volumes:
   citus_master_data:
-  citus_worker1_data:
-  citus_worker2_data:
