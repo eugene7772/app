@@ -2,16 +2,15 @@
 
 ### 1) Скачайте проект
 ### 2) Запустите докер
-Запустится:
-- Само приложение
-- бд postgres 18.1
-- redis
 
-start в корне проекта
+Есть два docker-compose
+один в корне - запустит auth, core db, второй в dialog запустит - dialog, citus 
+
+start
 ```bash
 docker compose up --build -d
 ```
-stop в корне проекта
+stop
 ```bash
 docker compose down -v
 ```
