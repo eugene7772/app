@@ -24,11 +24,11 @@ public class PostResponse {
     }
 
     @NotNull
-    UUID id;
+    private UUID id;
     @NotBlank
-    String text;
+    private String text;
     @JsonProperty("author_user_id")
-    UUID authorUserId;
+    private UUID authorUserId;
     @JsonProperty("created_at")
-    OffsetDateTime createdAt;
+    private OffsetDateTime createdAt;
 }

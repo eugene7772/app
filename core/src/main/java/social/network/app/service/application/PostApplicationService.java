@@ -4,18 +4,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import social.network.app.dto.PostCreateRequest;
-import social.network.app.dto.PostResponse;
-import social.network.app.dto.PostUpdateRequest;
+import social.network.app.dto.*;
 import social.network.app.entity.Post;
 import social.network.app.mapper.PostMapper;
+import social.network.app.service.FeedWebSocketPushService;
 import social.network.app.service.FriendService;
+import social.network.app.service.KafkaService;
 import social.network.app.service.PostService;
 import social.network.app.service.cache.PostCacheService;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 
-import static social.network.app.constants.ErrorConstants.CACHE_ERROR;
+import static social.network.app.constants.ErrorConstants.*;
 
 @Service
 @Slf4j
@@ -32,15 +33,41 @@ public class PostApplicationService {
     @Autowired
     private PostMapper postMapper;
 
+    @Autowired
+    private FeedWebSocketPushService feedWebSocketPushService;
+
+    @Autowired
+    private KafkaService kafkaService;
+
     @Transactional
     public UUID create(UUID userId, PostCreateRequest postCreateRequest) {
-        UUID postId = postService.create(postCreateRequest);
+        OffsetDateTime createdAt = OffsetDateTime.now();
+        UUID postId = postService.create(postCreateRequest, createdAt);
         log.info("Post {} saved.", postId);
+
+        List<UUID> friends = friendService.getAllById(userId);
+        log.info("Post {} added in cache to: {}", postId, friends);
+        PostDto post = PostDto.builder()
+                .postId(postId.toString())
+                .postText(postCreateRequest.getText())
+                .authorUserId(postCreateRequest.getAuthorUserId().toString())
+                .createdAt(createdAt)
+                .build();
         try {
-            List<UUID> friends = friendService.getAllById(userId);
+            friends.forEach(friendId -> {
+                feedWebSocketPushService.sendPostToUser(friendId.toString(), post);
+            });
+        } catch (Exception e) {
+            log.error(SEND_WS_ERROR, postId, e);
+        }
+        try {
+            kafkaService.sendPost(post);
+        } catch (Exception e) {
+            log.error(SEND_KAFKA_ERROR, postId, e);
+        }
+        try {
             postCacheService.addPostToManyFeeds(friends, postId);
             postCacheService.addPostToUserFeed(userId, postId);
-            log.info("Post {} added in cache to: {}", postId, friends);
         } catch (Exception e) {
             log.error(CACHE_ERROR, postId, e);
         }

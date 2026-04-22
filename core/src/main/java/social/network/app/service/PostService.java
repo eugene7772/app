@@ -9,6 +9,7 @@ import social.network.app.entity.Post;
 import social.network.app.mapper.PostMapper;
 import social.network.app.repository.PostRepository;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 
 @Service
@@ -20,8 +21,8 @@ public class PostService {
     @Autowired
     private PostMapper postMapper;
 
-    public UUID create(PostCreateRequest postCreateRequest) {
-        return postRepository.save(postMapper.toEntity(postCreateRequest));
+    public UUID create(PostCreateRequest postCreateRequest, OffsetDateTime createdAt) {
+        return postRepository.save(postMapper.toEntity(postCreateRequest, createdAt));
     }
 
     public void update(PostUpdateRequest postUpdateRequest) {

@@ -41,10 +41,10 @@ public class DialogRepository {
 
     public Dialog findByUsers(UUID user1Id, UUID user2Id) {
         String sql = """
-        SELECT id, user1_id, user2_id, created_at
-        FROM public.dialog
-        WHERE user1_id = ? AND user2_id = ?
-        """;
+                SELECT id, user1_id, user2_id, created_at
+                FROM public.dialog
+                WHERE user1_id = ? AND user2_id = ?
+                """;
 
         try {
             List<Dialog> dialogs = jdbcTemplate.query(sql, DIALOG_MAPPER, user1Id, user2Id);

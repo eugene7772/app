@@ -11,11 +11,11 @@ import java.util.List;
 
 @Service
 public class PostMapper {
-    public Post toEntity(PostCreateRequest postCreateRequest) {
+    public Post toEntity(PostCreateRequest postCreateRequest, OffsetDateTime createAt) {
         Post post = new Post();
         post.setText(postCreateRequest.getText());
         post.setAuthorUserId(postCreateRequest.getAuthorUserId());
-        post.setCreatedAt(OffsetDateTime.now());
+        post.setCreatedAt(createAt);
         return post;
     }
 

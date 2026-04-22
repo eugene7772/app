@@ -1,4 +1,20 @@
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: post-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: social.network.app.dto
+        spring.json.value.default.type: social.network.app.dto.PostDto
+        spring.json.use.type.headers: false
+    listener:
+      ack-mode: manual_immediate
   application:
     name: core
   datasource:
@@ -11,6 +27,11 @@ spring:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
       port: ${SPRING_DATA_REDIS_PORT:6379}
 app:
+  kafka:
+    topic:
+      post-create:
+        group-id: post-service-group
+        name: app_post_create
   jwt:
     secret: ${APP_JWT_SECRET:fgaqw342rvq3453dfgawer2342ef23f23f}
     ttl-minutes: ${APP_JWT_TTL_MINUTES:60}
@@ -49,3 +70,5 @@ management:
     metrics:
       export:
         enabled: true
+server:
+  port: 8081

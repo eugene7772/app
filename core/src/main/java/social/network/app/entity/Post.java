@@ -18,6 +18,6 @@ public class Post {
     private String text;
     @JsonProperty("author_user_id")
     private UUID authorUserId;
-    @JsonProperty("author_user_id")
+    @JsonProperty("created_at")
     private OffsetDateTime createdAt;
 }

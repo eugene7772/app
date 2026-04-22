@@ -13,4 +13,4 @@ app:
     ttl-minutes: ${APP_JWT_TTL_MINUTES:60}
 
 server:
-  port: 8080
+  port: 8082
