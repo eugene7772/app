@@ -40,24 +40,13 @@ public class UserRepository {
 
     public UUID save(UserEntity user) {
         return jdbcTemplate.queryForObject("""
-                        WITH ins AS (
-                          INSERT INTO users (login, password_hash)
-                          VALUES (?, ?)
-                          RETURNING id
-                        )
-                        INSERT INTO user_info (user_id, first_name, second_name, birthdate, biography, city)
-                        SELECT id, ?, ?, ?, ?, ?
-                        FROM ins
-                        RETURNING user_id
+                        INSERT INTO users (login, password_hash)
+                        VALUES (?, ?)
+                        RETURNING id
                         """,
                 UUID.class,
                 user.getLogin(),
-                user.getPasswordHash(),
-                user.getFirstName(),
-                user.getSecondName(),
-                user.getBirthdate(),
-                user.getBiography(),
-                user.getCity()
+                user.getPasswordHash()
         );
     }
 
@@ -98,5 +87,15 @@ public class UserRepository {
         } catch (Exception e) {
             return Optional.empty();
         }
+    }
+
+    public List<UserInfo> findUserInfoBatch(int limit, int offset) {
+        String sql = """
+                    SELECT user_id, first_name, second_name, birthdate, biography, city
+                    FROM user_info
+                    ORDER BY user_id
+                    LIMIT ? OFFSET ?
+                """;
+        return jdbcTemplate.query(sql, USER_INFO_BASE_MAPPER, limit, offset);
     }
 }

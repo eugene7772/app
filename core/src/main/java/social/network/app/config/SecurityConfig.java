@@ -28,7 +28,7 @@ public class SecurityConfig {
                                 "/images/**",
                                 "/login",
                                 "/user/register").permitAll()
-                        .requestMatchers("/post/feed/posted").permitAll()
+                        .requestMatchers("/post/feed/posted", "/user/search").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))

@@ -3,6 +3,7 @@ package social.network.app.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import social.network.app.dto.UserRegisterRequest;
@@ -10,7 +11,6 @@ import social.network.app.dto.UserRegisterResponse;
 import social.network.app.entity.UserInfo;
 import social.network.app.service.UserService;
 
-import java.util.List;
 import java.util.UUID;
 
 
@@ -37,10 +37,11 @@ public class UserController {
     }
 
     @GetMapping(value = "/search")
-    public ResponseEntity<List<UserInfo>> search(@RequestParam("first_name") String firstName, @RequestParam("last_name") String lastName) {
-        List<UserInfo> userInfoList = userService.search(firstName, lastName);
-        log.info("search successful: {}", userInfoList);
-        return ResponseEntity.ok(userInfoList);
+    public ResponseEntity<String> search(@RequestParam("first_name") String firstName, @RequestParam("last_name") String lastName) {
+        String userInfoJson = userService.searchJson(firstName, lastName);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(userInfoJson);
     }
 
 }

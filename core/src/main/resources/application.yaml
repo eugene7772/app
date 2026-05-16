@@ -35,6 +35,10 @@ app:
   jwt:
     secret: ${APP_JWT_SECRET:fgaqw342rvq3453dfgawer2342ef23f23f}
     ttl-minutes: ${APP_JWT_TTL_MINUTES:60}
+  redis:
+    user-info-cache:
+      warmup-enabled: false
+      warmup-batch-size: ${APP_REDIS_USER_INFO_WARMUP_BATCH_SIZE:1000}
   datasource:
     write:
       jdbc-url: jdbc:postgresql://localhost:25432/postgres

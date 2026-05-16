@@ -14,6 +14,7 @@ import social.network.app.entity.UserInfo;
 import social.network.app.exception.UserNotFoundException;
 import social.network.app.exception.UserRegisterException;
 import social.network.app.mapper.UserMapper;
+import social.network.app.repository.UserInfoRedisRepository;
 import social.network.app.repository.UserRepository;
 
 import java.util.List;
@@ -27,6 +28,9 @@ public class UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserInfoRedisRepository userInfoRedisRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -45,6 +49,7 @@ public class UserService {
             String passwordHash = passwordEncoder.encode(userRegisterRequest.getPassword());
             UserEntity userEntity = userMapper.toEntity(userRegisterRequest, passwordHash);
             UUID id = userRepository.save(userEntity);
+            userInfoRedisRepository.save(userMapper.toUserInfo(id, userRegisterRequest));
             dbRowsInsertedCounter.increment();
             return new UserRegisterResponse(id);
         } catch (Exception e) {
@@ -55,11 +60,16 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserInfo getById(UUID userId) {
-        return userRepository.getFullById(userId).orElseThrow(UserNotFoundException::new);
+        return userInfoRedisRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
     public List<UserInfo> search(String firstName, String lastName) {
         return userRepository.findByFirstNameAndLastName(firstName, lastName).get();
+    }
+
+    @Transactional(readOnly = true)
+    public String searchJson(String firstName, String lastName) {
+        return userInfoRedisRepository.findJsonByFirstNameAndSecondName(firstName, lastName);
     }
 }
