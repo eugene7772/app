@@ -20,6 +20,7 @@ public class UserInfoRedisRepository {
 
     private static final String USER_INFO_KEY_PREFIX = "user:info:";
     private static final String USER_SEARCH_KEY_PREFIX = "user:search:";
+    private static final String USER_SEARCH_JSON_KEY_PREFIX = "user:search-json:";
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -39,7 +40,11 @@ public class UserInfoRedisRepository {
         String userJson = toJson(userInfo);
         redisTemplate.execute(
                 saveUserInfoScript,
-                List.of(buildUserInfoKey(userInfo.getId()), buildSearchKey(userInfo.getFirstName(), userInfo.getSecondName())),
+                List.of(
+                        buildUserInfoKey(userInfo.getId()),
+                        buildSearchKey(userInfo.getFirstName(), userInfo.getSecondName()),
+                        buildSearchJsonKey(userInfo.getFirstName(), userInfo.getSecondName())
+                ),
                 userJson
         );
     }
@@ -55,11 +60,16 @@ public class UserInfoRedisRepository {
     }
 
     public String findJsonByFirstNameAndSecondName(String firstName, String secondName) {
-        Set<String> users = redisTemplate.opsForZSet().range(buildSearchKey(firstName, secondName), 0, -1);
-        if (users == null || users.isEmpty()) {
-            return "[]";
+        String searchJsonKey = buildSearchJsonKey(firstName, secondName);
+        String cachedResponse = redisTemplate.opsForValue().get(searchJsonKey);
+        if (cachedResponse != null) {
+            return cachedResponse;
         }
-        return "[" + String.join(",", users) + "]";
+
+        Set<String> users = redisTemplate.opsForZSet().range(buildSearchKey(firstName, secondName), 0, -1);
+        String response = users == null || users.isEmpty() ? "[]" : "[" + String.join(",", users) + "]";
+        redisTemplate.opsForValue().set(searchJsonKey, response);
+        return response;
     }
 
     public Optional<UserInfo> findById(UUID id) {
@@ -73,6 +83,10 @@ public class UserInfoRedisRepository {
 
     private String buildSearchKey(String firstName, String secondName) {
         return USER_SEARCH_KEY_PREFIX + normalize(firstName) + ":" + normalize(secondName);
+    }
+
+    private String buildSearchJsonKey(String firstName, String secondName) {
+        return USER_SEARCH_JSON_KEY_PREFIX + normalize(firstName) + ":" + normalize(secondName);
     }
 
     private String normalize(String value) {

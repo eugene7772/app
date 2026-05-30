@@ -1,0 +1,255 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Dialog Service API",
+    "description": "API for sending and listing user dialog messages.",
+    "version": "1.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8083",
+      "description": "Local Docker Compose"
+    },
+    {
+      "url": "http://localhost:8080",
+      "description": "Local service"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Dialog",
+      "description": "Dialog message operations"
+    }
+  ],
+  "paths": {
+    "/dialog/{user_id}/send": {
+      "post": {
+        "tags": [
+          "Dialog"
+        ],
+        "summary": "Send a message to a user",
+        "operationId": "sendMessage",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "Recipient user id.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageRequest"
+              },
+              "example": {
+                "text": "Hello"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message sent.",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "Message sent."
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/dialog/{user_id}/list": {
+      "get": {
+        "tags": [
+          "Dialog"
+        ],
+        "summary": "List messages with a user",
+        "operationId": "listMessages",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "Dialog participant user id.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dialog messages.",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/XRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DialogResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "headers": {
+      "XRequestId": {
+        "description": "Generated request identifier.",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Validation error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Missing or invalid bearer token."
+      },
+      "NotFound": {
+        "description": "Dialog or messages not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal server error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "MessageRequest": {
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "DialogResponse": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "to": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldViolation"
+            }
+          }
+        }
+      },
+      "FieldViolation": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

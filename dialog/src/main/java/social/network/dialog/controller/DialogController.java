@@ -19,19 +19,32 @@ import java.util.UUID;
 @Slf4j
 public class DialogController {
 
+    private static final String REQUEST_ID_HEADER = "x-request-id";
+
     @Autowired
     private DialogService dialogService;
 
     @PostMapping(value = "/{user_id}/send")
     public ResponseEntity<String> send(@AuthenticationPrincipal Jwt jwt, @PathVariable("user_id") UUID userId, @Valid @RequestBody MessageRequest request) {
-        log.info("Sending message: {} to {}", request, userId);
-        dialogService.send(UUID.fromString(jwt.getSubject()), userId, request);
-        return ResponseEntity.ok("Message sent.");
+        UUID requestId = UUID.randomUUID();
+        UUID fromUserId = UUID.fromString(jwt.getSubject());
+        log.info("requestId={} Sending message from {} to {}: {}", requestId, fromUserId, userId, request);
+        dialogService.send(fromUserId, userId, request);
+        log.info("requestId={} Message sent from {} to {}", requestId, fromUserId, userId);
+        return ResponseEntity.ok()
+                .header(REQUEST_ID_HEADER, requestId.toString())
+                .body("Message sent.");
     }
 
     @GetMapping(value = "/{user_id}/list")
     public ResponseEntity<List<DialogResponse>> list(@AuthenticationPrincipal Jwt jwt, @PathVariable("user_id") UUID userId) {
-        List<DialogResponse> response = dialogService.list(UUID.fromString(jwt.getSubject()), userId);
-        return ResponseEntity.ok(response);
+        UUID requestId = UUID.randomUUID();
+        UUID fromUserId = UUID.fromString(jwt.getSubject());
+        log.info("requestId={} Listing dialog messages between {} and {}", requestId, fromUserId, userId);
+        List<DialogResponse> response = dialogService.list(fromUserId, userId);
+        log.info("requestId={} Dialog messages listed, count={}", requestId, response.size());
+        return ResponseEntity.ok()
+                .header(REQUEST_ID_HEADER, requestId.toString())
+                .body(response);
     }
 }
