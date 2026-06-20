@@ -6,5 +6,5 @@ RUN mvn -pl core -am -DskipTests package
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/core/target/*.jar core.jar
-EXPOSE 8080
+EXPOSE 8081
 ENTRYPOINT ["java","-jar","/app/core.jar"]

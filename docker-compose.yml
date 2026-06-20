@@ -1,11 +1,25 @@
 services:
-  db:
+  db-primary:
     image: postgres:18.1
-    container_name: app-db
+    container_name: app-db-primary
     environment:
       POSTGRES_DB: app
       POSTGRES_USER: app
       POSTGRES_PASSWORD: app
+      REPLICATION_USER: replicator
+      REPLICATION_PASSWORD: replicator
+    command:
+      - postgres
+      - -c
+      - wal_level=replica
+      - -c
+      - max_wal_senders=10
+      - -c
+      - max_replication_slots=10
+      - -c
+      - wal_keep_size=4096MB
+      - -c
+      - hot_standby=on
     ports:
       - "5432:5432"
     volumes:
@@ -17,46 +31,148 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
-  core:
+
+  db-replica-1:
+    image: postgres:18.1
+    container_name: app-db-replica-1
+    depends_on:
+      db-primary:
+        condition: service_healthy
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      REPLICATION_USER: replicator
+      REPLICATION_PASSWORD: replicator
+      REPLICATION_SLOT: replica_1
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata_replica_1:/var/lib/postgresql/data
+      - ./core/docker/db/replica:/replica:ro
+    entrypoint: ["/bin/bash", "/replica/entrypoint.sh"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  db-replica-2:
+    image: postgres:18.1
+    container_name: app-db-replica-2
+    depends_on:
+      db-primary:
+        condition: service_healthy
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      REPLICATION_USER: replicator
+      REPLICATION_PASSWORD: replicator
+      REPLICATION_SLOT: replica_2
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata_replica_2:/var/lib/postgresql/data
+      - ./core/docker/db/replica:/replica:ro
+    entrypoint: ["/bin/bash", "/replica/entrypoint.sh"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  postgres-haproxy:
+    image: haproxy:2.9
+    container_name: postgres-haproxy
+    depends_on:
+      db-replica-1:
+        condition: service_healthy
+      db-replica-2:
+        condition: service_healthy
+    ports:
+      - "35432:5432"
+      - "8404:8404"
+    volumes:
+      - ./core/docker/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+
+  core-1: &core-service
     build:
       context: .
       dockerfile: core/Dockerfile
-    container_name: core-service
     depends_on:
-      db:
+      db-primary:
+        condition: service_healthy
+      postgres-haproxy:
+        condition: service_started
+      redis:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
-      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-primary:5432/app
+      SPRING_DATASOURCE_USERNAME: app
+      SPRING_DATASOURCE_PASSWORD: app
+      APP_DATASOURCE_WRITE_URL: jdbc:postgresql://db-primary:5432/app
+      APP_DATASOURCE_WRITE_USERNAME: app
+      APP_DATASOURCE_WRITE_PASSWORD: app
+      APP_DATASOURCE_READ_URL: jdbc:postgresql://postgres-haproxy:5432/app
+      APP_DATASOURCE_READ_USERNAME: app
+      APP_DATASOURCE_READ_PASSWORD: app
       SPRING_DATA_REDIS_HOST: ${SPRING_DATA_REDIS_HOST}
       SPRING_DATA_REDIS_PORT: ${SPRING_DATA_REDIS_PORT}
       APP_REDIS_USER_INFO_WARMUP_ENABLED: ${APP_REDIS_USER_INFO_WARMUP_ENABLED:-false}
       APP_REDIS_USER_INFO_WARMUP_BATCH_SIZE: ${APP_REDIS_USER_INFO_WARMUP_BATCH_SIZE:-1000}
+
+  core-2:
+    <<: *core-service
+
+  core-3:
+    <<: *core-service
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: core-nginx
+    depends_on:
+      - core-1
+      - core-2
+      - core-3
     ports:
-      - "8081:8080"
+      - "8081:80"
+    volumes:
+      - ./core/docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
 
   auth:
     build:
       context: .
       dockerfile: auth/Dockerfile
     container_name: auth-service
+    depends_on:
+      db-primary:
+        condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
-      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-primary:5432/app
+      SPRING_DATASOURCE_USERNAME: app
+      SPRING_DATASOURCE_PASSWORD: app
     ports:
       - "8082:8080"
 
-  #redis:
-    #image: redis:7
-    #container_name: redis
-    #ports:
-      #- "6379:6379"
-    #volumes:
-      #- redis_data:/data
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
 
 volumes:
   pgdata:
+  pgdata_replica_1:
+  pgdata_replica_2:
   redis_data:
   healthcheck-volume:

@@ -41,9 +41,9 @@ app:
       warmup-batch-size: ${APP_REDIS_USER_INFO_WARMUP_BATCH_SIZE:1000}
   datasource:
     write:
-      jdbc-url: jdbc:postgresql://localhost:25432/postgres
-      username: postgres
-      password: pass
+      jdbc-url: ${APP_DATASOURCE_WRITE_URL:${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}}
+      username: ${APP_DATASOURCE_WRITE_USERNAME:${SPRING_DATASOURCE_USERNAME:postgres}}
+      password: ${APP_DATASOURCE_WRITE_PASSWORD:${SPRING_DATASOURCE_PASSWORD:ghwnj4l5kjtbnw}}
       driver-class-name: org.postgresql.Driver
       hikari:
         connection-timeout: 3000
@@ -52,9 +52,9 @@ app:
         minimum-idle: 2
         max-lifetime: 30000
     read:
-      jdbc-url: jdbc:postgresql://localhost:35432/postgres
-      username: postgres
-      password: pass
+      jdbc-url: ${APP_DATASOURCE_READ_URL:${APP_DATASOURCE_WRITE_URL:${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}}}
+      username: ${APP_DATASOURCE_READ_USERNAME:${APP_DATASOURCE_WRITE_USERNAME:${SPRING_DATASOURCE_USERNAME:postgres}}}
+      password: ${APP_DATASOURCE_READ_PASSWORD:${APP_DATASOURCE_WRITE_PASSWORD:${SPRING_DATASOURCE_PASSWORD:ghwnj4l5kjtbnw}}}
       driver-class-name: org.postgresql.Driver
       hikari:
         connection-timeout: 3000

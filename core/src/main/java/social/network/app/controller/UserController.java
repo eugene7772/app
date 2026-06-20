@@ -11,6 +11,7 @@ import social.network.app.dto.UserRegisterResponse;
 import social.network.app.entity.UserInfo;
 import social.network.app.service.UserService;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -42,6 +43,15 @@ public class UserController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userInfoJson);
+    }
+
+    @GetMapping(value = "/v1/search")
+    public ResponseEntity<List<UserInfo>> searchV1(@RequestParam("first_name") String firstName, @RequestParam("last_name") String lastName) {
+        List<UserInfo> users = userService.search(firstName, lastName);
+        log.info("Users: {}", users);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(users);
     }
 
 }

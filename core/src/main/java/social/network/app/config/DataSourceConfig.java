@@ -13,8 +13,8 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Configuration
-//@EnableTransactionManagement
+@Configuration
+@EnableTransactionManagement
 public class DataSourceConfig {
 
     @Bean
