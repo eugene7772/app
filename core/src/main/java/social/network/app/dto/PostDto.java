@@ -2,6 +2,7 @@ package social.network.app.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import social.network.app.entity.PostStatus;
 
 import java.time.OffsetDateTime;
 
@@ -17,4 +18,7 @@ public class PostDto {
     private String authorUserId;
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
+    private PostStatus status;
+    @JsonProperty("event_type")
+    private String eventType;
 }

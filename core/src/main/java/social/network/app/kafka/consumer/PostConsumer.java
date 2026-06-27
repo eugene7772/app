@@ -13,7 +13,7 @@ import social.network.app.dto.PostDto;
 public class PostConsumer {
 
     @KafkaListener(
-            topics = "app_post_create",
+            topics = {"app_post_create", "app_post_delete"},
             groupId = "post-service-group"
     )
     public void consume(ConsumerRecord<String, PostDto> record) {

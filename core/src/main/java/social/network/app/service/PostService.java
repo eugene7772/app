@@ -29,12 +29,32 @@ public class PostService {
         postRepository.update(postMapper.toEntity(postUpdateRequest));
     }
 
-    public void delete(UUID id) {
-        postRepository.delete(id);
+    public void markDeleted(UUID id) {
+        postRepository.markDeleted(id);
+    }
+
+    public void markDeleting(UUID id) {
+        postRepository.markDeleting(id);
+    }
+
+    public void markDeleteFailed(UUID id) {
+        postRepository.markDeleteFailed(id);
+    }
+
+    public void markActive(UUID id) {
+        postRepository.markActive(id);
+    }
+
+    public void markCreationFailed(UUID id) {
+        postRepository.markCreationFailed(id);
     }
 
     public Post get(UUID id) {
         return postRepository.get(id).orElse(null);
+    }
+
+    public Post getForDelete(UUID id) {
+        return postRepository.getForDelete(id).orElse(null);
     }
 
     public List<Post> getAllLastPostsByUsers(List<UUID> allIds) {

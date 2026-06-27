@@ -33,6 +33,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 
+    @ExceptionHandler(PostCreationException.class)
+    public ResponseEntity<ErrorResponse> handle(PostCreationException e) {
+        ErrorResponse body = new ErrorResponse(e.getMessage(), List.of());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
+    @ExceptionHandler(PostDeleteException.class)
+    public ResponseEntity<ErrorResponse> handle(PostDeleteException e) {
+        ErrorResponse body = new ErrorResponse(e.getMessage(), List.of());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException e) {
         var fields = e.getBindingResult().getFieldErrors().stream()

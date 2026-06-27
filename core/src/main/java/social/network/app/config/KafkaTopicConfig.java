@@ -15,4 +15,12 @@ public class KafkaTopicConfig {
                 .replicas(1)
                 .build();
     }
+
+    @Bean
+    public NewTopic postDeleteTopic() {
+        return TopicBuilder.name("app_post_delete")
+                .partitions(3)
+                .replicas(1)
+                .build();
+    }
 }

@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import social.network.app.dto.*;
 import social.network.app.entity.Post;
+import social.network.app.entity.PostStatus;
+import social.network.app.exception.PostCreationException;
+import social.network.app.exception.PostDeleteException;
 import social.network.app.mapper.PostMapper;
 import social.network.app.service.FeedWebSocketPushService;
 import social.network.app.service.FriendService;
@@ -39,20 +42,30 @@ public class PostApplicationService {
     @Autowired
     private KafkaService kafkaService;
 
-    @Transactional
+    @Transactional(noRollbackFor = PostCreationException.class)
     public UUID create(UUID userId, PostCreateRequest postCreateRequest) {
         OffsetDateTime createdAt = OffsetDateTime.now();
         UUID postId = postService.create(postCreateRequest, createdAt);
-        log.info("Post {} saved.", postId);
+        log.info("Post {} saved with PUBLISHING status.", postId);
 
         List<UUID> friends = friendService.getAllById(userId);
-        log.info("Post {} added in cache to: {}", postId, friends);
         PostDto post = PostDto.builder()
                 .postId(postId.toString())
                 .postText(postCreateRequest.getText())
                 .authorUserId(postCreateRequest.getAuthorUserId().toString())
                 .createdAt(createdAt)
+                .status(PostStatus.ACTIVE)
+                .eventType("post_created")
                 .build();
+        try {
+            kafkaService.sendPostAndWait(post);
+            postService.markActive(postId);
+            log.info("Post {} activated after kafka event was sent.", postId);
+        } catch (Exception e) {
+            log.error(SEND_KAFKA_ERROR, postId, e);
+            postService.markCreationFailed(postId);
+            throw new PostCreationException(POST_CREATE_ERROR, e);
+        }
         try {
             friends.forEach(friendId -> {
                 feedWebSocketPushService.sendPostToUser(friendId.toString(), post);
@@ -61,13 +74,9 @@ public class PostApplicationService {
             log.error(SEND_WS_ERROR, postId, e);
         }
         try {
-            kafkaService.sendPost(post);
-        } catch (Exception e) {
-            log.error(SEND_KAFKA_ERROR, postId, e);
-        }
-        try {
             postCacheService.addPostToManyFeeds(friends, postId);
             postCacheService.addPostToUserFeed(userId, postId);
+            log.info("Post {} added in cache to: {}", postId, friends);
         } catch (Exception e) {
             log.error(CACHE_ERROR, postId, e);
         }
@@ -80,23 +89,53 @@ public class PostApplicationService {
         log.info("Post: {} updated.", postUpdateRequest);
     }
 
-    @Transactional
+    @Transactional(noRollbackFor = PostDeleteException.class)
     public void delete(UUID userId, UUID id) {
-        Post post = postService.get(id);
+        Post post = postService.getForDelete(id);
+        if (post == null) {
+            log.warn("Post {} not found or already deleted.", id);
+            return;
+        }
         if (userId.equals(post.getAuthorUserId())) {
-            postService.delete(id);
+            postService.markDeleting(id);
         } else {
             log.warn("This user: {}, don't created this post: {}", userId, id);
             return;
         }
-        log.info("Post {} deleted.", id);
+        log.info("Post {} moved to DELETING status.", id);
+        List<UUID> friends = Collections.emptyList();
         try {
             postCacheService.removePostFromUserFeed(userId, id);
-            List<UUID> friends = friendService.getAllById(userId);
+            friends = friendService.getAllById(userId);
             postCacheService.removePostFromManyFeeds(friends, id);
             log.info("Post {} removed from cache for: {}", id, userId);
         } catch (Exception e) {
             log.error(CACHE_ERROR, id, e);
+        }
+        PostDto deletedPost = PostDto.builder()
+                .postId(id.toString())
+                .postText(post.getText())
+                .authorUserId(post.getAuthorUserId().toString())
+                .createdAt(post.getCreatedAt())
+                .status(PostStatus.DELETED)
+                .eventType("post_deleted")
+                .build();
+        try {
+            kafkaService.sendPostDeletedAndWait(deletedPost);
+            postService.markDeleted(id);
+            log.info("Post {} moved to DELETED status after kafka delete event was sent.", id);
+        } catch (Exception e) {
+            log.error(SEND_KAFKA_ERROR, id, e);
+            postService.markDeleteFailed(id);
+            throw new PostDeleteException(POST_DELETE_ERROR, e);
+        }
+        try {
+            List<UUID> recipients = new ArrayList<>(friends);
+            recipients.add(userId);
+            recipients.forEach(recipientId ->
+                    feedWebSocketPushService.sendPostToUser(recipientId.toString(), deletedPost));
+        } catch (Exception e) {
+            log.error(SEND_WS_ERROR, id, e);
         }
     }
 

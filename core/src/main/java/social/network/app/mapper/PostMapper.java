@@ -5,6 +5,7 @@ import social.network.app.dto.PostCreateRequest;
 import social.network.app.dto.PostResponse;
 import social.network.app.dto.PostUpdateRequest;
 import social.network.app.entity.Post;
+import social.network.app.entity.PostStatus;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -16,6 +17,7 @@ public class PostMapper {
         post.setText(postCreateRequest.getText());
         post.setAuthorUserId(postCreateRequest.getAuthorUserId());
         post.setCreatedAt(createAt);
+        post.setStatus(PostStatus.PUBLISHING);
         return post;
     }
 

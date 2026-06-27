@@ -20,4 +20,5 @@ public class Post {
     private UUID authorUserId;
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
+    private PostStatus status;
 }
