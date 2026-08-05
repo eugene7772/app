@@ -12,5 +12,21 @@ app:
     secret: ${APP_JWT_SECRET:fgaqw342rvq3453dfgawer2342ef23f23f}
     ttl-minutes: ${APP_JWT_TTL_MINUTES:60}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: always
+  health:
+    redis:
+      enabled: false
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
 server:
   port: 8080
